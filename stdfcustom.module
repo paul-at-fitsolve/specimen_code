@@ -468,22 +468,6 @@ function _stdfcustom_publishers_autocomplete($value) {
   
   drupal_json_output($results);
 }
-
-/*
- * We translate keywords and so we get them from the database.
- *
- * function _stdfcustom_keywords_autocomplete() {
- * /**
- * returns a array for use with #options in a form field
- *
- * $v = taxonomy_vocabulary_machine_name_load ( 'keywords' );
- * $terms = taxonomy_get_tree ( $v->vid );
- * foreach ( $terms as $term ) {
- * $options [$term->tid] = $term->name;
- * }
- * return $options;
- * }
- */
 /*
  * We translate countries and so we get them from the database.
  */
@@ -501,7 +485,6 @@ function _stdfcustom_countries_autocomplete($value) {
     }
   }
   drupal_json_output($options);
-  // return $options;
 }
 
 /**
@@ -619,19 +602,16 @@ function stdfcustom_apachesolr_query_alter($query) {
   }
   $compiled_filter = new SolrFilterSubQuery('OR');
   if ($_SESSION['advanced']['title'] != '') {
-    // $compiled_filter->addFilter ( 'title', $_SESSION ['advanced'] ['title'] );
     $filter = build_solr_search_string($_SESSION['advanced']['title']);
     $query->addFilter('label', $filter);
   }
   
   if ($_SESSION['advanced']['author'] != '') {
-    // $compiled_filter->addFilter ( 'sm_vid_Author', $_SESSION ['advanced'] ['author'] );
     $filter = build_solr_search_string($_SESSION['advanced']['author']);
     $query->addFilter('sm_vid_Author', $filter);
   }
   
   if ($_SESSION['advanced']['publisher'] != '') {
-    // $compiled_filter->addFilter ( 'sm_vid_Publisher', $_SESSION ['advanced'] ['publisher'] );
     $filter = build_solr_search_string($_SESSION['advanced']['publisher']);
     $query->addFilter('sm_vid_Publisher', $filter);
   }
@@ -645,7 +625,6 @@ function stdfcustom_apachesolr_query_alter($query) {
     $range = '[1900-01-01T00:00:00.000Z TO NOW]';
   }
   $compiled_filter->addFilter('ds_field_publication_date', $range);
-  // dpm($_SESSION['advanced']['language']);
   
   $language_filter = new SolrFilterSubQuery('OR');
   if (! $_SESSION['advanced']['language']['EN'] == 0) {
@@ -659,10 +638,10 @@ function stdfcustom_apachesolr_query_alter($query) {
   }
   
   $compiled_filter->addFilterSubQuery($language_filter);
-  
-  // $query->addFilterSubQuery ( $compiled_filter );
-  // dpm($query->getParams());
 }
+/*
+ * Implements hook_formid_alter()'
+ */
 function stdfcustom_block_view_nice_menus_2_alter(&$data, $block) {
   global $user;
   $data['subject'] = t('Welcome @user', array(
